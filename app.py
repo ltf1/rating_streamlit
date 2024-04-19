@@ -32,7 +32,7 @@ def plot_minute_level_data(program, df_features):
     # Show the graph for each program
     st.pyplot(plt)
 
-def dataframe_with_selections(df: pd.DataFrame, init_value: bool = False, width: int = 1200) -> pd.DataFrame:
+def dataframe_with_selections(df: pd.DataFrame, init_value: bool = False, width: int = 1500) -> pd.DataFrame:
     df_with_selections = df.copy()
     df_with_selections.insert(0, "Select", init_value)
 
@@ -70,13 +70,16 @@ def main ():
         
         
     columns_to_display = ["program_name", "match_start_date", "channel_id_str", "low", "weighted_prediction", "max"]
+
     #"channel_id_str", "group_name", "match_stage_8", "predictions_euro_2020", "predictions_world_cup",, 
 
-    filtered_match_stage = filtered_match_stage[columns_to_display].rename(columns={"weighted_prediction": "prediction"})
-
+    filtered_match_stage = filtered_match_stage[columns_to_display]
+    
+    filtered_match_stage.rename(columns={"program_name": "Match Name", "match_start_date": "Match date", "channel_id_str" : "Channel", "low": "Min Pred", "weighted_prediction": "Expected Pred", "max": "Max Pred" }, inplace=True)
+    
     selection = dataframe_with_selections(filtered_match_stage)
 
-    program_names = selection.program_name.unique()
+    program_names = selection["Match Name"].unique()
 
     df_plot = pd.read_excel("euro_2024_predictions.xlsx")
     
