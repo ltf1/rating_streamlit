@@ -12,9 +12,9 @@ def plot_minute_level_data(program, df_features):
     minute_leveldata = df_features[df_features["program_name"] == program].copy()
     
     minute_leveldata = minute_leveldata[["program_name", "datetime_minute", 'predictions_euro', 'predictions_world_cup']].reset_index(drop=True).sort_values(by='datetime_minute')
-    minute_leveldata["weighted_prediction"] = (minute_leveldata["predictions_euro"] * 0.6) +(minute_leveldata["predictions_world_cup"] * 0.4)
-    minute_leveldata["min"] = minute_leveldata["weighted_prediction"]*0.8
-    minute_leveldata["max"] = minute_leveldata["weighted_prediction"]*1.2
+    minute_leveldata["weighted_prediction"] = (minute_leveldata["predictions_euro"] * 0.85) +(minute_leveldata["predictions_world_cup"] * 0.15)
+    minute_leveldata["min"] = (minute_leveldata["weighted_prediction"]*0.8)
+    minute_leveldata["max"] = (minute_leveldata["weighted_prediction"]*1.2)
 
     # Plot actual and predicted values
     plt.figure(figsize=(12, 6))
@@ -58,6 +58,7 @@ def main ():
 
     df = pd.read_excel('best_training_predictions.v4.xlsx', sheet_name='euro_2024_predictions')
 
+    df["channel_id_str"] = df["channel_id_str"].astype(str).str.replace("33", "TRT SPOR").str.replace("8", "TRT 1")
 
     selected_match_stage = st.sidebar.selectbox("Select Match Stage", df.match_stage_original.unique())
 
@@ -67,7 +68,8 @@ def main ():
     else:
         filtered_match_stage = df[df.match_stage_original == selected_match_stage]
         
-    columns_to_display = ["program_name", "match_start_date",  "low", "weighted_prediction", "max"]
+        
+    columns_to_display = ["program_name", "match_start_date", "channel_id_str", "low", "weighted_prediction", "max"]
     #"channel_id_str", "group_name", "match_stage_8", "predictions_euro_2020", "predictions_world_cup",, 
 
     filtered_match_stage = filtered_match_stage[columns_to_display].rename(columns={"weighted_prediction": "prediction"})
