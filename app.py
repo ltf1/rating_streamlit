@@ -56,7 +56,7 @@ def main ():
     
     st.title('EURO 2024 Rating Predictions')
 
-    df = pd.read_excel('best_training_predictions.v3.xlsx', sheet_name='euro_2024_predictions')
+    df = pd.read_excel('best_training_predictions.v4.xlsx', sheet_name='euro_2024_predictions')
 
 
     selected_match_stage = st.sidebar.selectbox("Select Match Stage", df.match_stage_original.unique())
